@@ -1,28 +1,29 @@
+// server.js
 const express = require("express")
-const { createProxyMiddleware } = require("express-http-proxy")
+const { createProxyMiddleware } = require("http-proxy-middleware")
 const path = require("path")
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware to log requests
+// Log requests
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`)
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`)
   next()
 })
 
-// Serve static files for the gateway page
+// Serve the static gateway UI
 app.use(express.static(path.join(__dirname, "public")))
 
-// React app proxy (port 3000)
+// Base target for all apps (single Vercel deployment)
+const BASE_URL = "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app"
+
+// React app proxy
 app.use(
   "/react",
   createProxyMiddleware({
-    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app/react",
+    target: BASE_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/react": "",
-    },
     ws: true,
     onError: (err, req, res) => {
       console.error("React proxy error:", err)
@@ -31,15 +32,12 @@ app.use(
   }),
 )
 
-// Vue app proxy (port 5173)
+// Vue app proxy
 app.use(
   "/vue",
   createProxyMiddleware({
-    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app/vue",
+    target: BASE_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/vue": "",
-    },
     ws: true,
     onError: (err, req, res) => {
       console.error("Vue proxy error:", err)
@@ -48,15 +46,13 @@ app.use(
   }),
 )
 
-// Twig app proxy (port 8000)
+// Twig app proxy
 app.use(
   "/twig",
   createProxyMiddleware({
-    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app/twig",
+    target: BASE_URL,
     changeOrigin: true,
-    pathRewrite: {
-      "^/twig": "",
-    },
+    ws: true,
     onError: (err, req, res) => {
       console.error("Twig proxy error:", err)
       res.status(503).json({ error: "Twig app unavailable" })
@@ -64,12 +60,12 @@ app.use(
   }),
 )
 
-// Root route - serve gateway page
+// Root route - gateway homepage
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
 })
 
-// Health check endpoint
+// Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() })
 })
@@ -79,6 +75,7 @@ app.use((req, res) => {
   res.status(404).json({ error: "Not found" })
 })
 
+// Start server
 app.listen(PORT, () => {
   console.log(`\n🚀 Reverse Proxy Gateway running on http://localhost:${PORT}`)
   console.log(`\n📍 Available routes:`)
