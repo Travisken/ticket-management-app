@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket Management App - Framework Gateway</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .card p {
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .card a {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.3s ease;
+    }
+
+    .card a:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      opacity: 0.8;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    .status {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      color: white;
+      margin-top: 30px;
+      font-size: 14px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .status-indicator.online {
+      background: #10b981;
+    }
+
+    .status-indicator.offline {
+      background: #ef4444;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 32px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        padding: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎫 Ticket Management App</h1>
+      <p>Choose your preferred framework implementation</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon">⚛️</div>
+        <h2>React</h2>
+        <p>Modern React with Next.js App Router, featuring server components and optimized performance.</p>
+        <a href="/react">Launch React App</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💚</div>
+        <h2>Vue.js</h2>
+        <p>Progressive Vue 3 framework with Vue Router, composition API, and reactive state management.</p>
+        <a href="/vue">Launch Vue App</a>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🐘</div>
+        <h2>Twig</h2>
+        <p>Server-side PHP with Twig templating engine, traditional backend rendering approach.</p>
+        <a href="/twig">Launch Twig App</a>
+      </div>
+    </div>
+
+    <div class="status">
+      <div style="margin-bottom: 15px; font-weight: 600;">App Status</div>
+      <div class="status-item">
+        <span><span class="status-indicator online"></span>React (port 3000)</span>
+        <span id="react-status">Checking...</span>
+      </div>
+      <div class="status-item">
+        <span><span class="status-indicator online"></span>Vue (port 5173)</span>
+        <span id="vue-status">Checking...</span>
+      </div>
+      <div class="status-item">
+        <span><span class="status-indicator online"></span>Twig (port 8000)</span>
+        <span id="twig-status">Checking...</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Reverse Proxy Gateway • All three implementations share the same UI and features</p>
+    </div>
+  </div>
+
+  <script>
+    // Check app availability
+    async function checkAppStatus() {
+      const apps = [
+        { name: 'react', port: 3000, element: 'react-status' },
+        { name: 'vue', port: 5173, element: 'vue-status' },
+        { name: 'twig', port: 8000, element: 'twig-status' }
+      ];
+
+      for (const app of apps) {
+        try {
+          const response = await fetch(`http://localhost:${app.port}`, { method: 'HEAD' });
+          document.getElementById(app.element).textContent = '🟢 Online';
+        } catch (error) {
+          document.getElementById(app.element).textContent = '🔴 Offline';
+        }
+      }
+    }
+
+    // Check status on page load
+    checkAppStatus();
+    // Check every 30 seconds
+    setInterval(checkAppStatus, 30000);
+  </script>
+</body>
+</html>

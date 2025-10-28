@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # React app (Next.js)
+  react:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # Vue app
+  vue:
+    build:
+      context: .
+      dockerfile: Dockerfile.vue
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # Twig app (PHP)
+  twig:
+    image: php:8.2-apache
+    ports:
+      - "8000:80"
+    volumes:
+      - ./twig:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    command: >
+      bash -c "a2enmod rewrite && 
+               sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/sites-available/*.conf &&
+               apache2-foreground"
+
+  # Reverse proxy gateway
+  proxy:
+    build:
+      context: ./proxy
+    ports:
+      - "3001:3001"
+    depends_on:
+      - react
+      - vue
+      - twig
+    environment:
+      - PORT=3001
+    command: npm start
