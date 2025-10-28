@@ -1,16 +1,13 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "react-app/build/**", "use": "@vercel/static" },
-    { "src": "vue-app/dist/**", "use": "@vercel/static" },
-    { "src": "twig-app/dist/**", "use": "@vercel/static" },
-    { "src": "server.js", "use": "@vercel/node" }
-  ],
   "routes": [
-    { "src": "^/react/(.*)$", "dest": "/react-app/build/$1" },
-    { "src": "^/vue/(.*)$", "dest": "/vue-app/dist/$1" },
-    { "src": "^/twig/(.*)$", "dest": "/twig-app/dist/$1" },
-    { "src": "/health", "dest": "/api/health" },
-    { "src": "/", "dest": "/react-app/build/index.html" }
+    { "src": "/vue/(.*)", "dest": "/src/dist/$1" },
+    { "src": "/twig/(.*)", "dest": "/twig/$1" },
+    { "src": "/(.*)", "dest": "/app/$1" }
+  ],
+  "builds": [
+    { "src": "next.config.mjs", "use": "@vercel/next" },
+    { "src": "src/dist/**", "use": "@vercel/static" },
+    { "src": "twig/**", "use": "@vercel/static" }
   ]
 }
