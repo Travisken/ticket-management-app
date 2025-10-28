@@ -1,0 +1,8 @@
+{
+  "routes": [
+    { "src": "^/react/(.*)", "dest": "/react-app/build/$1" },
+    { "src": "^/vue/(.*)", "dest": "/vue-app/dist/$1" },
+    { "src": "^/twig/(.*)", "dest": "/twig-app/dist/$1" },
+    { "src": "/(.*)", "dest": "/react-app/build/$1" }
+  ]
+}
