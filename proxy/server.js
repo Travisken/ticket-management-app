@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "public")))
 
 // Base target for all apps (single Vercel deployment)
-const BASE_URL = "https://ticket-management-3vwo89b0a-traviskens-projects.vercel.app/"
+const BASE_URL = "https://ticket-management-3vwo89b0a-traviskens-projects.vercel.app"
 
 // React app proxy
 app.use(
