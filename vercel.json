@@ -2,12 +2,12 @@
   "version": 2,
   "builds": [
     { "src": "package.json", "use": "@vercel/next" },
-    { "src": "src/dist/**", "use": "@vercel/static" },
-    { "src": "twig/**", "use": "@vercel/static" }
+    { "src": "src/dist/**/*", "use": "@vercel/static" },
+    { "src": "twig/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/vue/(.*)", "dest": "/src/dist/$1" },
-    { "src": "/twig/(.*)", "dest": "/twig/$1" },
+    { "src": "/vue($|/.*)", "dest": "/src/dist/index.html" },
+    { "src": "/twig($|/.*)", "dest": "/twig/index.html" },
     { "src": "/(.*)", "dest": "/" }
   ]
 }

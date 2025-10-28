@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Management (Twig Version)</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #444;
+    }
+    nav a {
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+    }
+    nav a:hover {
+      background: #555;
+    }
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ticket Management (Twig Demo)</h1>
+  </header>
+
+  <nav>
+    <a href="?page=home">Home</a>
+    <a href="?page=login">Login</a>
+    <a href="?page=dashboard">Dashboard</a>
+    <a href="?page=tickets">Tickets</a>
+  </nav>
+
+  <main id="content">
+    <div id="page-content"></div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page') || 'home';
+
+    const content = document.getElementById('page-content');
+
+    const pages = {
+      home: `<div class="card"><h2>Welcome</h2><p>This is the static Twig version home page.</p></div>`,
+      login: `<div class="card"><h2>Login</h2><p>Use <b>test@example.com</b> / <b>password123</b> to log in (mock only).</p></div>`,
+      dashboard: `<div class="card"><h2>Dashboard</h2><p>Here you would see ticket stats.</p></div>`,
+      tickets: `<div class="card"><h2>Tickets</h2><p>This is a placeholder for your ticket list.</p></div>`,
+      'ticket-detail': `<div class="card"><h2>Ticket Details</h2><p>This would show details of a single ticket.</p></div>`
+    };
+
+    content.innerHTML = pages[page] || `<div class="card"><h2>404</h2><p>Page not found</p></div>`;
+  </script>
+</body>
+</html>
