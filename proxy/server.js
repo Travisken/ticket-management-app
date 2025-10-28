@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(
   "/react",
   createProxyMiddleware({
-    target: "http://localhost:3000",
+    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app",
     changeOrigin: true,
     pathRewrite: {
       "^/react": "",
@@ -35,7 +35,7 @@ app.use(
 app.use(
   "/vue",
   createProxyMiddleware({
-    target: "http://localhost:5173",
+    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app",
     changeOrigin: true,
     pathRewrite: {
       "^/vue": "",
@@ -52,7 +52,7 @@ app.use(
 app.use(
   "/twig",
   createProxyMiddleware({
-    target: "http://localhost:8000",
+    target: "https://ticket-management-1loe0umwv-traviskens-projects.vercel.app",
     changeOrigin: true,
     pathRewrite: {
       "^/twig": "",
